@@ -1,47 +1,33 @@
 id: sc16io_file_source_complex
-label: file_source_complex
+label: File Source Complex
 category: '[sc16io]'
 
 templates:
   imports: from gnuradio import sc16io
-  make: sc16io.file_source_complex(${filename}, ${source_type}, ${repeat})
+  make: sc16io.file_source_complex(${filename}, ${source_type.cpp_value}, ${repeat})
 
-#  Make one 'parameters' list entry for every parameter you want settable from the GUI.
-#     Keys include:
-#     * id (makes the value accessible as keyname, e.g. in the make entry)
-#     * label (label shown in the GUI)
-#     * dtype (e.g. int, float, complex, byte, short, xxx_vector, ...)
-#     * default
 parameters:
-- id: parametername_replace_me
-  label: FIX ME:
-  dtype: string
-  default: You need to fill in your grc/sc16io_file_source_complex.block.yaml
-#- id: ...
-#  label: ...
-#  dtype: ...
+- id: source_type
+  label: Source Type
+  dtype: enum
+  default: sc16
+  options: [sc16, sc8]
+  option_labels: [Complex Integer 16, Complex Integer 8]
+  option_attributes:
+    cpp_value: ['"sc16"', '"sc8"']
+    type: [sc16, sc8]
 
-#  Make one 'inputs' list entry per input and one 'outputs' list entry per output.
-#  Keys include:
-#      * label (an identifier for the GUI)
-#      * domain (optional - stream or message. Default is stream)
-#      * dtype (e.g. int, float, complex, byte, short, xxx_vector, ...)
-#      * vlen (optional - data stream vector length. Default is 1)
-#      * optional (optional - set to 1 for optional inputs. Default is 0)
-inputs:
-#- label: ...
-#  domain: ...
-#  dtype: ...
-#  vlen: ...
-#  optional: ...
+- id: filename
+  label: File
+  dtype: file_open
+
+- id: repeat
+  label: Repeat
+  dtype: bool
+  default: 'False'
 
 outputs:
-#- label: ...
-#  domain: ...
-#  dtype: ...
-#  vlen: ...
-#  optional: ...
+- domain: stream
+  dtype: ${source_type.type}
 
-#  'file_format' specifies the version of the GRC yml format used in the file
-#  and should usually not be changed.
 file_format: 1
